@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wow-world-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wow-world-server
+  template:
+    metadata:
+      labels:
+        app: wow-world-server
+    spec:
+      containers:
+        - name: wow-world-server
+          image: acore/ac-wotlk-worldserver:master
+          tty: true
+          stdin: true
+          ports:
+            - containerPort: 8085
+            - containerPort: 7878
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sql-password
+                  key: MYSQL_ROOT_PASSWORD
+            - name: AC_DATA_DIR
+              value: "/azerothcore/env/dist/data"
+            - name: AC_LOGS_DIR
+              value: "/azerothcore/env/dist/logs"
+            - name: AC_LOGIN_DATABASE_INFO
+              value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_auth"
+            - name: AC_WORLD_DATABASE_INFO
+              value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_world"
+            - name: AC_CHARACTER_DATABASE_INFO
+              value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_characters"

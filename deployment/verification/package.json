@@ -1,0 +1,14 @@
+{
+  "name": "wow-server-deployment-verification",
+  "version": "1.0.0",
+  "description": "Verify WoW Server deployment",
+  "type": "module",
+  "scripts": {
+    "test": "node test_login.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@timelostprototype/wow-client": "^0.0.6"
+  }
+}
