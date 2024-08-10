@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: wow-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: wow-db
+  template:
+    metadata:
+      labels:
+        app: wow-db
+    spec:
+      containers:
+        - name: wow-db
+          image: mysql:8.3
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sql-password
+                  key: MYSQL_ROOT_PASSWORD
+          ports:
+            - containerPort: 3306
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: ac-database-volume
+#         readinessProbe:
+#           {{- include "common.probe" . | nindent 12 }}
+#         livenessProbe:
+#           {{- include "common.probe" . | nindent 12 }}
+      volumes:
+        - name: ac-database-volume
+          persistentVolumeClaim:
+            claimName: ac-database-pvc

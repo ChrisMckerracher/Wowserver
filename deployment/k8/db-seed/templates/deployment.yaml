@@ -1,0 +1,31 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wow-db-init
+spec:
+  template:
+    metadata:
+      labels:
+        app: wow-db-init
+    spec:
+      containers:
+        - name: wow-db-init
+          image: acore/ac-wotlk-authserver:master
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sql-password
+                  key: MYSQL_ROOT_PASSWORD
+            - name: AC_DATA_DIR
+              value: "/azerothcore/env/dist/data"
+            - name: AC_LOGS_DIR
+              value: "/azerothcore/env/dist/logs"
+            - name: AC_LOGIN_DATABASE_INFO
+              value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_auth"
+            - name: AC_WORLD_DATABASE_INFO
+              value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_world"
+            - name: AC_CHARACTER_DATABASE_INFO
+              value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_characters"
+      restartPolicy: Never
+  backoffLimit: 1
