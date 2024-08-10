@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: wow-db-init
-          image: acore/ac-wotlk-authserver:master
+          image: acore/ac-wotlk-db-import:master
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
