@@ -1,0 +1,3 @@
+apiVersion: v2
+name: wow-data-init
+version: 0.1.0

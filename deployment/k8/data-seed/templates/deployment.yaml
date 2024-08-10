@@ -1,0 +1,22 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: wow-data-init
+spec:
+  template:
+    metadata:
+      labels:
+        app: wow-data-init
+    spec:
+      containers:
+        - name: wow-db-init
+          image: acore/ac-wotlk-client-data:master
+          volumeMounts:
+            - mountPath: /azerothcore/env/dist/data
+              name: ac-data-volume
+      volumes:
+        - name: ac-data-volume
+          persistentVolumeClaim:
+            claimName: ac-data-pvc
+      restartPolicy: Never
+  backoffLimit: 1

@@ -17,9 +17,16 @@ spec:
           image: acore/ac-wotlk-worldserver:master
           tty: true
           stdin: true
+          volumeMounts:
+            - mountPath: /azerothcore/env/dist/data
+              name: ac-data-volume
           ports:
             - containerPort: 8085
             - containerPort: 7878
+          volumes:
+            - name: ac-data-volume
+              persistentVolumeClaim:
+                claimName: ac-data-pvc
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -36,3 +43,7 @@ spec:
               value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_world"
             - name: AC_CHARACTER_DATABASE_INFO
               value: "ac-database;3306;root;$(MYSQL_ROOT_PASSWORD);acore_characters"
+      volumes:
+        - name: ac-data-volume
+          persistentVolumeClaim:
+            claimName: ac-data-pvc
