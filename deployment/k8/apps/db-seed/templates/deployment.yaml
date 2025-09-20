@@ -8,9 +8,21 @@ spec:
       labels:
         app: wow-db-init
     spec:
+#      nodeSelector:
+#        kubernetes.io/arch: amd64
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"  # allow scheduling on control-plane
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/master"         # older taint name (optional)
+          operator: "Exists"
+          effect: "NoSchedule"
       containers:
         - name: wow-db-init
           image: acore/ac-wotlk-db-import:master
+          {{- with .Values.global.containerSecurityContext }}
+          securityContext: {{ toYaml . | nindent 12 }}
+          {{- end }}
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:

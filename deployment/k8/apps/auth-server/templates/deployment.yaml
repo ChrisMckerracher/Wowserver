@@ -29,3 +29,6 @@ spec:
               value: "/azerothcore/env/dist/logs"
             - name: AC_TEMP_DIR
               value: "/azerothcore/env/dist/temp"
+          {{- with .Values.global.containerSecurityContext }}
+          securityContext: {{ toYaml . | nindent 12 }}
+          {{- end }}

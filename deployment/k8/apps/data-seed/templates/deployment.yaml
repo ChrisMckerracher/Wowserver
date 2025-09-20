@@ -14,6 +14,9 @@ spec:
           volumeMounts:
             - mountPath: /azerothcore/env/dist/data
               name: ac-data-volume
+          { { - with .Values.global.containerSecurityContext } }
+          securityContext: { { toYaml . | nindent 12 } }
+          { { - end } }
       volumes:
         - name: ac-data-volume
           persistentVolumeClaim:

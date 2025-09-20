@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: wow-db
-          image: mysql:8.3
+          image: bitnamilegacy/mysql:8.4
           env:
             - name: MYSQL_ROOT_PASSWORD
               valueFrom:
@@ -26,10 +26,13 @@ spec:
           volumeMounts:
             - mountPath: /var/lib/mysql
               name: ac-database-volume
-#         readinessProbe:
-#           {{- include "common.probe" . | nindent 12 }}
-#         livenessProbe:
-#           {{- include "common.probe" . | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop: [ "ALL" ]
+            seccompProfile:
+              type: RuntimeDefault
       volumes:
         - name: ac-database-volume
           persistentVolumeClaim:

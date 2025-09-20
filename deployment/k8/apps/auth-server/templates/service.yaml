@@ -9,5 +9,4 @@ spec:
     - protocol: TCP
       port: 3724
       targetPort: 3724
-      nodePort: 3724
-  type: NodePort
+  type: LoadBalancer
